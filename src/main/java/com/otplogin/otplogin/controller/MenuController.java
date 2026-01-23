@@ -1,10 +1,15 @@
+
+
 package com.otplogin.otplogin.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.otplogin.otplogin.model.MenuItem;
 import com.otplogin.otplogin.service.MenuService;
@@ -16,25 +21,39 @@ public class MenuController {
     @Autowired
     private MenuService menuService;
 
-    // URL: POST http://localhost:8081/api/menu/add
-    @PostMapping("/add")
-    public MenuItem addItem(@RequestBody MenuItem item) {
-        return menuService.addMenuItem(item);
+    // Add Item (With Image Upload)
+    // Postman me Body -> form-data select karna
+    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public MenuItem addItem(
+            @RequestParam("name") String name,
+            @RequestParam("description") String description,
+            @RequestParam("price") Double price,
+            @RequestParam("category") String category,
+            @RequestParam("image") MultipartFile image) throws IOException {
+        
+        return menuService.addMenuItem(name, description, price, category, image);
     }
 
-    // URL: GET http://localhost:8081/api/menu/all
+    // Get All Items
     @GetMapping("/all")
     public List<MenuItem> getAllItems() {
         return menuService.getAllMenuItems();
     }
 
-    // URL: PUT http://localhost:8081/api/menu/update/1  (Yahan 1 ID hai)
-    @PutMapping("/update/{id}")
-    public MenuItem updateItem(@PathVariable Long id, @RequestBody MenuItem item) {
-        return menuService.updateMenuItem(id, item);
+    // Update Item (With optional Image Upload)
+    @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public MenuItem updateItem(
+            @PathVariable Long id,
+            @RequestParam("name") String name,
+            @RequestParam("description") String description,
+            @RequestParam("price") Double price,
+            @RequestParam("category") String category,
+            @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+        
+        return menuService.updateMenuItem(id, name, description, price, category, image);
     }
 
-    // URL: DELETE http://localhost:8081/api/menu/delete/1
+    // Delete Item
     @DeleteMapping("/delete/{id}")
     public Map<String, String> deleteItem(@PathVariable Long id) {
         menuService.deleteMenuItem(id);
