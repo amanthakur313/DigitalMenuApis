@@ -16,6 +16,7 @@ import com.otplogin.otplogin.service.MenuService;
 
 @RestController
 @RequestMapping("/api/menu")
+@CrossOrigin(origins = "*")
 public class MenuController {
 
     @Autowired
