@@ -34,7 +34,11 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/api/auth/**",    // Login/Signup ke liye
                     "/api/menu/**",    // Menu ke liye
-                    "/uploads/**"      // Images ke liye
+                    "/uploads/**",        // Images in static/uploads
+                    "/css/**",            // CSS files
+                    "/js/**",             // JS files
+                    "/images/**",         // Other images
+                    "/"    // Images ke liye
                 ).permitAll()
                 .anyRequest().authenticated()
             );
